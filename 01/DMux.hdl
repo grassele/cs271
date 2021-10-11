@@ -3,6 +3,8 @@
 // by Nisan and Schocken, MIT Press.
 // File name: projects/01/DMux.hdl
 
+// Elizabeth Grassel
+
 /**
  * Demultiplexor:
  * {a, b} = {in, 0} if sel == 0
