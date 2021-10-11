@@ -3,6 +3,8 @@
 // by Nisan and Schocken, MIT Press.
 // File name: projects/01/Mux.hdl
 
+// Elizabeth Grassel 
+
 /** 
  * Multiplexor:
  * out = a if sel == 0
@@ -14,5 +16,9 @@ CHIP Mux {
     OUT out;
 
     PARTS:
-    // Put your code here:
+    Not(in=sel, out=notsel);  // sel=1, notsel=0
+    And(a=a, b=notsel, out=nselAnda);  // note that the a= and b= (left side) are referring to the two inputs for the specific chip, not the original a and b. The =a (right side) goes back to the IN options for inputs or outputs from previous chips
+    And(a=b, b=sel, out=selAndb);
+    Or(a=nselAnda, b=selAndb, out=out);
+
 }
