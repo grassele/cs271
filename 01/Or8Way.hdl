@@ -3,6 +3,8 @@
 // by Nisan and Schocken, MIT Press.
 // File name: projects/01/Or8Way.hdl
 
+// Elizabeth Grassel
+
 /**
  * 8-way Or: 
  * out = (in[0] or in[1] or ... or in[7])
@@ -13,5 +15,11 @@ CHIP Or8Way {
     OUT out;
 
     PARTS:
-    // Put your code here:
+    Or(a=in[0], b=in[1], out=1Or2);
+    Or(a=in[2], b=in[3], out=3Or4);
+    Or(a=in[4], b=in[5], out=5Or6);
+    Or(a=in[6], b=in[7], out=7Or8);
+    Or(a=1Or2, b=3Or4, out= 1Or2Or3Or4);
+    Or(a=5Or6, b=7Or8, out=5Or6Or7Or8);
+    Or(a=1Or2Or3Or4, b=5Or6Or7Or8, out=out);
 }
