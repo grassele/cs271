@@ -42,5 +42,27 @@ CHIP ALU {
         ng; // 1 if (out < 0),  0 otherwise
 
     PARTS:
-   // Put you code here:
-}
+    
+        // preset the x input
+        Mux16(a=x, b[0..15]=false, sel=zx, out=setzx);
+        Not16(in=setzx, out=notx);
+        Mux16(a=setzx, b=notx, sel=nx, out=fx);
+
+        // preset the y input
+        Mux16(a=y, b[0..15]=false, sel=zy, out=setzy);
+        Not16(in=setzy, out=noty);
+        Mux16(a=setzy, b=noty, sel=ny, out=fy);
+
+        // select between addition or Anding
+        And16(a=fx, b=fy, out=andxy);
+        Add16(a=fx, b=fy, out=addxy);
+        Mux16(a=andxy, b=addxy, sel=f, out=addvandout);
+
+        // how to postset out
+        Not16(in=addvandout, out=notout);
+        Mux16(a=addvandout, b=notout, sel=no, out=finalout);
+
+        // status bits
+        
+
+        }
