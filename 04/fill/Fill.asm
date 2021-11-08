@@ -11,4 +11,55 @@
 // "white" in every pixel;
 // the screen should remain fully clear as long as no key is pressed.
 
-// Put your code here.
+// Elizabeth Grassel
+
+(INFINITE_LOOP)
+
+    // save start location of screen memory
+    @SCREEN 
+    D=A
+    @R0
+    M=D
+
+    // temporarily save start location of keyboard memory in D
+    @KBD
+    D=M
+
+    // completely blacken screen
+    @BLACKEN
+    D; JEQ
+
+    // completely whiten screen
+    @WHITEN
+    D; JGT
+
+    (BLACKEN)
+        @R1
+        M=-1
+        @DRAW
+        0;JUMP
+
+    (WHITEN)
+        @R1
+        M=0
+        @DRAW
+        0;JUMP
+        
+    (DRAW)
+        @R1
+        D=M
+        @R0
+        A=M
+        M=D
+
+    @R0
+    M=M+1
+    D=M
+
+    @KBD
+    D=A-D
+    @DRAW
+    D; JGT
+    
+    @INFINITE_LOOP
+    0;JMP
