@@ -9,6 +9,8 @@
 // This program only needs to handle arguments that satisfy
 // R0 >= 0, R1 >= 0, and R0*R1 < 32768.
 
+// Elizabeth Grassel
+
 // Add R0 to R2 R1 times
 
 // test 4*5
