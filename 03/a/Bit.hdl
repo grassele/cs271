@@ -9,10 +9,17 @@
  *                 else out does not change (out[t+1] = out[t])
  */
 
+// Elizabeth Grassel
+
+// Comparision ended successfully
+
 CHIP Bit {
     IN in, load;
     OUT out;
 
     PARTS:
-    // Put your code here:
+        // selects for out(t) (READ OLD OUTPUT) or in(t+1) (WRITE NEW OUTPUT FOR NEXT TIME)
+    Mux(a=dffout, b=in, sel=load, out=rw);
+        // out(t+1) = in(t) when rw = dffout; out(t+1) = out(t) when rw = in; tick and tock is what makes it save data
+    DFF(in=rw, out=dffout, out=out);
 }

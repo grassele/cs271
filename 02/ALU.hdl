@@ -44,7 +44,7 @@ CHIP ALU {
     PARTS:
     
         // preset the x input
-        Mux16(a=x, b[0..15]=false, sel=zx, out=setzx);
+        Mux16(a=x, b[0..15]=false, sel=zx, out=setzx); // if b[0..15] is false, you can just omit it in the line conditions and the default is b=false
         Not16(in=setzx, out=notx);
         Mux16(a=setzx, b=notx, sel=nx, out=fx);
 
@@ -58,11 +58,16 @@ CHIP ALU {
         Add16(a=fx, b=fy, out=addxy);
         Mux16(a=andxy, b=addxy, sel=f, out=addvandout);
 
-        // how to postset out
-        Not16(in=addvandout, out=notout);
-        Mux16(a=addvandout, b=notout, sel=no, out=finalout);
-
-        // status bits
-        
+        // how to postset out (do we negate the output?) also setting ng flag
+        Not16(in=addvandout, out=notfout); // !out 
+        Mux16(a=addvandout, b=notfout, sel=no, out=out, out[0..7]=outlow8, out[8..15]=outhigh8, out[15]=ng); // no. out = out : !out 
+       
+        // status codes (ng already set, this section sets zr)
+        // msb is -/+ (2's complement system) 
+        Or8Way(in=outlow8, out=orlow8); 
+        Or8Way(in=outhigh8, out=orhigh8); 
+        Or(a=orlow8, b=orhigh8, out=zr1); 
+        // If all bits = 0, zr = 1 
+        Not(in=zr1, out=zr);
 
         }

@@ -25,6 +25,8 @@
  * than to the address resulting from executing the current instruction. 
  */
 
+// Elizabeth Grassel
+
 CHIP CPU {
 
     IN  inM[16],         // M value input  (M = contents of RAM[A])
@@ -39,5 +41,5 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
-    // Put your code here:
+        
 }
