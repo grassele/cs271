@@ -1,7 +1,5 @@
 #include "parser.h" // use quotes instead of <> for custom file instead of built-in library
 
-// test if this uploads a new version to GitHub now
-
 int main(int argc, const char *argv[]) {
     
     // check that user entered exactly one argument
