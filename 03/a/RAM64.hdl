@@ -3,6 +3,9 @@
 // by Nisan and Schocken, MIT Press.
 // File name: projects/03/a/RAM64.hdl
 
+// Elizabeth Grassel
+// Comparison ended successfully
+
 /**
  * Memory of 64 registers, each 16 bit-wide. Out holds the value
  * stored at the memory location specified by address. If load==1, then 
@@ -15,5 +18,17 @@ CHIP RAM64 {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+        // choosing which group of 8 registers to select 
+    DMux8Way(in=load, sel=address[3..5], a=r2a, b=r2b, c=r2c, d=r2d, e=r2e, f=r2f, g=r2g, h=r2h);
+        // reading/writing data for a register within a group of 8
+    RAM8(in=in, load=r2a, address=address[0..2], out=out2a);
+    RAM8(in=in, load=r2b, address=address[0..2], out=out2b);
+    RAM8(in=in, load=r2c, address=address[0..2], out=out2c);
+    RAM8(in=in, load=r2d, address=address[0..2], out=out2d);
+    RAM8(in=in, load=r2e, address=address[0..2], out=out2e);
+    RAM8(in=in, load=r2f, address=address[0..2], out=out2f);
+    RAM8(in=in, load=r2g, address=address[0..2], out=out2g);
+    RAM8(in=in, load=r2h, address=address[0..2], out=out2h);
+        // outputting the selected register data from the selected group of 8 registers
+    Mux8Way16(a=out2a, b=out2b, c=out2c, d=out2d, e=out2e, f=out2f,g=out2g, h=out2h, sel=address[3..5], out=out);
 }
