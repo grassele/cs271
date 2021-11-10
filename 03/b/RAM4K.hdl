@@ -3,6 +3,9 @@
 // by Nisan and Schocken, MIT Press.
 // File name: projects/03/b/RAM4K.hdl
 
+// Elizabeth Grassel
+// Comparison ended successfully
+
 /**
  * Memory of 4K registers, each 16 bit-wide. Out holds the value
  * stored at the memory location specified by address. If load==1, then 
@@ -15,5 +18,18 @@ CHIP RAM4K {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+    // choosing between RAM512 registers
+    DMux8Way(in=load, sel=address[9..11], a=r4a, b=r4b, c=r4c, d=r4d, e=r4e, f=r4f, g=r4g, h=r4h);
+    //
+    RAM512(in=in, load=r4a, address=address[0..8], out=r4aout);
+    RAM512(in=in, load=r4b, address=address[0..8], out=r4bout);
+    RAM512(in=in, load=r4c, address=address[0..8], out=r4cout);
+    RAM512(in=in, load=r4d, address=address[0..8], out=r4dout);
+    RAM512(in=in, load=r4e, address=address[0..8], out=r4eout);
+    RAM512(in=in, load=r4f, address=address[0..8], out=r4fout);
+    RAM512(in=in, load=r4g, address=address[0..8], out=r4gout);
+    RAM512(in=in, load=r4h, address=address[0..8], out=r4hout);
+    //
+    Mux8Way16(a=r4aout, b=r4bout, c=r4cout, d=r4dout, e=r4eout, f=r4fout, g=r4gout, h=r4hout, sel=address[9..11], out=out);
+
 }

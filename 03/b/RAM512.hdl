@@ -3,6 +3,9 @@
 // MIT Press. Book site: www.idc.ac.il/tecs
 // File name: projects/03/b/RAM512.hdl
 
+// Elizabeth Grassel
+// Comparison ended successfully
+
 /**
  * Memory of 512 registers, each 16 bit-wide. Out holds the value
  * stored at the memory location specified by address. If load==1, then 
@@ -15,5 +18,17 @@ CHIP RAM512 {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+    //
+    DMux8Way(in=load, sel=address[6..8], a=r3a, b=r3b, c=r3c, d=r3d, e=r3e, f=r3f, g=r3g, h=r3h);
+    //
+    RAM64(in=in, load=r3a, address=address[0..5], out=out3a);
+    RAM64(in=in, load=r3b, address=address[0..5], out=out3b);
+    RAM64(in=in, load=r3c, address=address[0..5], out=out3c);
+    RAM64(in=in, load=r3d, address=address[0..5], out=out3d);
+    RAM64(in=in, load=r3e, address=address[0..5], out=out3e);
+    RAM64(in=in, load=r3f, address=address[0..5], out=out3f);
+    RAM64(in=in, load=r3g, address=address[0..5], out=out3g);
+    RAM64(in=in, load=r3h, address=address[0..5], out=out3h);
+    //
+    Mux8Way16(a=out3a, b=out3b, c=out3c, d=out3d, e=out3e, f=out3f, g=out3g, h=out3h, sel=address[6..8], out=out);
 }
