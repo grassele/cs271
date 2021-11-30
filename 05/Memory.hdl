@@ -3,6 +3,9 @@
 // by Nisan and Schocken, MIT Press.
 // File name: projects/05/Memory.hdl
 
+// Elizabeth Grassel
+
+
 /**
  * The complete address space of the Hack computer's memory,
  * including RAM and memory-mapped I/O. 
@@ -27,5 +30,27 @@ CHIP Memory {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+
+
+    // choose which part of memory to use (3 options: RAM16K, Screen, or Keyboard)
+
+    DMux4Way(in=load, sel=address[13..14], a=ram_1, b=ram_2, c=scrn, d=kbrd);
+    Or(a=ram_1, b=ram_2, out=ram_mem);
+
+    // how to use each different part of memory
+
+    RAM16K(in=in, load=ram_mem, address=address[0..13], out=ramout);
+    Screen(in=in, load=scrn, address=address[0..12], out=screenout);
+    Keyboard(out=keyboardout);
+
+    // chose which place you saved the data as the output
+
+    Mux4Way16(a=ramout, b=ramout, c=screenout, d=keyboardout, sel=address[13..14], out=out);
+
+
+
+    // RAM16K: 0 - 16383 (0b - 011111111111111b (1 "0" then 14 "1"s))
+    // Screen: 16384 - 24575 (100000000000000b - 101111111111111b (15 digits))
+    // Keyboard: 24576 (110000000000000b)
+    
 }
