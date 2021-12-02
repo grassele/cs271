@@ -1,3 +1,6 @@
+#ifndef __SYMTABLE_H__
+#define __SYMTABLE_H__
+
 #include "stdint.h"
 #include <stdio.h>
 #include <string.h>
@@ -16,6 +19,9 @@ typedef struct Symbol {
 struct Symbol* hashArray[SYMBOL_TABLE_SIZE];
 
 int hash(char *str);
-struct Symbol *find(char * key);
-void insert(char* key, hack_addr addr);
-void display_table();
+// Exercise 2: updating symtable functions
+struct Symbol *symtable_find(char * key);   // old: struct Symbol *find(char * key);
+void symtable_insert(char* key, hack_addr addr);    // old: void insert(char* key, hack_addr addr);
+void symtable_display_table();  // old: void display_table();
+
+#endif

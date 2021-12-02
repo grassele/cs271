@@ -1,53 +1,25 @@
-int main()
-{        
-    // Create empty item
-    struct Symbol* item = (struct Symbol*) malloc(sizeof(struct Symbol));
-    item->name = NULL;  
-    item->addr = -1; 
+#include "parser.h"
 
-    // Labels from Max.asm
-    insert("OUTPUT_FIRST", 11);
-    printf("Inserting OUTPUT_FIRST at address 11\n");
-    insert("OUTPUT_D", 13);
-    printf("Inserting OUTPUT_D at address 13\n");
-    insert("INFINITE_LOOP", 15);
-    printf("Inserting INFINITE_LOOP at address 15\n");
-    printf("\n");
-
-    // Display table
-    printf("Displaying table:\n");
-    display_table();
-    printf("\n");
-      
-    // Search label (FOUND)
-    char * label = "OUTPUT_FIRST";
-    printf("Looking up %s\n", label);
-    item = find(label);
-
-    if(item != NULL) {
-      printf("Element %s found: %d\n", item->name, item->addr);
-    } else {
-      printf("Element %s not found\n", label);
+int main(int argc, const char *argv[]) {
+    
+    // check that user entered exactly one argument
+    if (argc != 2) {  // incorrect number of arguments
+      exit_program(EXIT_INCORRECT_ARGUMENTS, argv[0]);
     }
-    printf("\n");
 
-    // Search label (NOT FOUND)
-    label = "MY_LABEL";
-    printf("Looking up %s\n", label);
-    item = find(label);
+    // open the argument passed as a file and save it as a file pointer
+    FILE *file = fopen( argv[1], "r" );
+    
+    // check if your file pointer is NULL, and if so, print error and exit w a failure
+    if (file == NULL) {
+        perror("Unable to open file!");
+        exit(EXIT_FAILURE);
+     }
+    
+    // call function parse and pass it the file pointer
+    parse(file);
 
-    if(item != NULL) {
-      printf("Element %s found: %d\n", item->name, item->addr);
-    } else {
-      printf("Element %s not found\n", label);
-    }
-    printf("\n");
+    // close file pointer
+    fclose(file);
 
-    // Display table again
-    printf("Displaying table:\n");
-    display_table();
-    printf("\n");
-
-    // Free memory
-    free(item);   
 }

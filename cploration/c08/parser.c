@@ -55,22 +55,6 @@ char *extract_label(const char *line, char *label) {
     return label;
 }
 
-/*
-char *extract_label(const char *line, char* label) {
-    int i = 0;
-    for (const char *s = line; *s; s++) {
-        if (*s == '(' || *s == ')') {
-            continue;
-        }
-        else {
-            label[i++] = s*;
-        }
-    }
-    label[i] = '\0';
-    return label;
-}
-*/
-
 bool is_Atype(const char *line) {
     return line[0] == '@';
 }

@@ -1,3 +1,6 @@
+#ifndef __PARSER_H__
+#define __PARSER_H__
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -7,6 +10,9 @@
 
 #define MAX_LINE_LENGTH 200
 #define MAX_LABEL_LENGTH MAX_LINE_LENGTH - 2
+// Exercise 3: update/add constants
+#define MAX_HACK_ADDRESS INT16_MAX
+#define MAX_INSTRUCTIONS MAX_HACK_ADDRESS
 
 typedef int16_t hack_addr;
 typedef int16_t opcode;
@@ -49,3 +55,5 @@ bool is_Ctype(const char *);
 
 // takes a line and extracts the label name from the parentheses
 char *extract_label(const char *line, char* label);
+
+#endif

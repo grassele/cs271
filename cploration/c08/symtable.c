@@ -3,28 +3,28 @@
 int hash(char *str) {
     unsigned long hash = 5381;
     int c;
-    while (c == *str++){
+    while (c = *str++) { // changed this from having a double equals, which was wrong - we need to be setting
         hash = ((hash << 5) + hash) + c;
     }
     return hash % SYMBOL_TABLE_SIZE;
 }
 
-void insert(char *key, hack_addr addr) {
+void symtable_insert(char* key, hack_addr addr) {   // old: void insert(char *key, hack_addr addr) {
     struct Symbol *item = (struct Symbol*) malloc(sizeof(struct Symbol));
     item -> addr = addr;
-    item -> name = key;
+    item -> key = key;
     int hashIndex = hash(key);
-    while(hashArray[hashIndex] != NULL && hashArray[hashIndex]->name != NULL) {
+    while(hashArray[hashIndex] != NULL && hashArray[hashIndex] -> key != NULL) {
         ++hashIndex;
         hashIndex %= SYMBOL_TABLE_SIZE;
     }
     hashArray[hashIndex] = item;
 }
 
-struct Symbol *find(char * name) {
-    int hashIndex = hash(name);
+struct Symbol *symtable_find(char * key) { // old: struct Symbol *find(char * name) {
+    int hashIndex = hash(key);
     while(hashArray[hashIndex] != NULL) {
-        if(hashArray[hashIndex]->name == name) {
+        if(hashArray[hashIndex]->name == key) {
             return hashArray[hashIndex];
         }
         ++ hashIndex;
