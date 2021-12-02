@@ -3,7 +3,7 @@
 int hash(char *str) {
     unsigned long hash = 5381;
     int c;
-    while (c == *str++){
+    while (c = *str++) { // changed this from having a double equals, which was wrong - we need to be setting
         hash = ((hash << 5) + hash) + c;
     }
     return hash % SYMBOL_TABLE_SIZE;
