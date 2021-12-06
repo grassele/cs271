@@ -1,4 +1,4 @@
-#include <symtable.h>
+#include "symtable.h"
 
 int hash(char *str) {
     unsigned long hash = 5381;
@@ -12,9 +12,9 @@ int hash(char *str) {
 void symtable_insert(char* key, hack_addr addr) {   // old: void insert(char *key, hack_addr addr) {
     struct Symbol *item = (struct Symbol*) malloc(sizeof(struct Symbol));
     item -> addr = addr;
-    item -> key = key;
+    item -> name = key;
     int hashIndex = hash(key);
-    while(hashArray[hashIndex] != NULL && hashArray[hashIndex] -> key != NULL) {
+    while(hashArray[hashIndex] != NULL && hashArray[hashIndex] -> name != NULL) {
         ++hashIndex;
         hashIndex %= SYMBOL_TABLE_SIZE;
     }
