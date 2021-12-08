@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define NUM_PREDEFINED_SYMBOLS 23
 
@@ -182,6 +183,7 @@ static inline dest_id str_to_destid(const char *s) {
     else if (strcmp(s, "ADM") == 0) {
         id = DEST_ADM;
     }
+    return id;
 }
 
 
@@ -299,6 +301,7 @@ static inline comp_id str_to_compid(const char *s, int *a) {
         id = COMP_D_OR_M;
         *a = 1;
     }
+    return id;
 }
 
 

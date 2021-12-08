@@ -1,6 +1,4 @@
 #include "parser.h"
-#include "error.h"
-#include "symtable.h"
 
 int parse(FILE * file, instruction *instructions) {
     char line[MAX_LINE_LENGTH] = {0};

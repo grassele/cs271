@@ -2,6 +2,8 @@
 #define __PARSER_H__
 
 #include "hack.h"
+#include "error.h"
+#include "symtable.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
