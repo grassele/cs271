@@ -2,7 +2,7 @@
 #include "error.h"
 #include "symtable.h"
 
-void parse(FILE * file) {
+int parse(FILE * file, instruction *instructions) {
     char line[MAX_LINE_LENGTH] = {0};
         unsigned int line_num = 0;
         unsigned int instr_num = 0;
@@ -40,10 +40,24 @@ void parse(FILE * file) {
                 continue;   // does continue actually exit the function?
             }
             if (is_Ctype(line)) {
+                char *tmp_line[MAX_LINE_LENGTH];
+                strcpy(tmp_line, line);
+                parse_C_instruction(tmp_line, &instr.instr.c);
+                if (instr.instr.c.dest == DEST_INVALID) {
+                    exit_program(EXIT_INVALID_C_DEST, line_num, line);
+                }
+                else if (instr.instr.c.comp == COMP_INVALID) {
+                    exit_program(EXIT_INVALID_C_COMP, line_num, line);
+                }
+                else if (instr.instr.c.dest == DEST_INVALID) {
+                    exit_program(EXIT_INVALID_C_DEST, line_num, line);
+                }
+                instr.itype = C_TYPE;
                 inst_type = 'C';
             }
             printf("%c  %s\n", inst_type, line); 
-            instr_num ++;
+            instructions[instr_num++] = instr;
+            return instr_num;
         }
 }
 
@@ -116,8 +130,22 @@ bool parse_A_instruction(const char *line, a_instruction *instr) {
         instr->operand.address = result;
         instr->is_addr = true;
     }
+}
 
 
-
+void parse_C_instruction(char *line, c_instruction *instr) {
+    char* temp = strtok(line, ";");
+    char* jump = strtok(NULL, ";");
+    char* dest = strtok(temp, "=");
+    char* comp = strtok(NULL, "=");
+    int a;
+    if (comp == NULL) {
+        comp = dest;
+        dest = NULL;
+    }
+    instr->jump = str_to_jumpid(jump);
+    instr->dest = str_to_destid(dest);
+    instr->comp = str_to_compid(comp, &a);
+    instr->a = (a == 0 ? 0 : 1);
 }
 
