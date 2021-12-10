@@ -37,13 +37,13 @@
         @R1
         M=-1
         @DRAW
-        0;JUMP
+        0;JMP
 
     (WHITEN)
         @R1
         M=0
         @DRAW
-        0;JUMP
+        0;JMP
         
     (DRAW)
         @R1

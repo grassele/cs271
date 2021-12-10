@@ -98,7 +98,8 @@ void add_predefined_symbols() {
 
 bool parse_A_instruction(const char *line, a_instruction *instr) {
     char* s = (char*) malloc(strlen(line));
-    s = line + 1;
+    // s = line + 1;
+    strcpy(s, line + 1);
     char* s_end = NULL;
     long result = strtol(s, &s_end, 10);
     if (s_end == s) {
