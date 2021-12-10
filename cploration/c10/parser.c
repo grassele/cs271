@@ -1,62 +1,62 @@
 #include "parser.h"
 
-int parse(FILE * file, instruction *instructions) {
+int parse(FILE *file, instruction *instructions) {
     char line[MAX_LINE_LENGTH] = {0};
-        unsigned int line_num = 0;
-        unsigned int instr_num = 0;
-        instruction instr;
-        add_predefined_symbols();
-        symtable_display_table();
-        while (fgets(line, sizeof(line), file)) {
-            line_num ++;
-            if (instr_num > MAX_INSTRUCTIONS) {
-                exit_program(EXIT_TOO_MANY_INSTRUCTIONS, MAX_INSTRUCTIONS + 1);
-            }
-            strip(line);
-            if (!*line) {
-                continue;
-            }
-            char inst_type;
-            if (is_Atype(line)) {
-                if (!parse_A_instruction(line, &instr.instr.a)) {
-                    exit_program(EXIT_INVALID_A_INSTR, line_num, line);
-                }
-                instr.itype = A_TYPE;
-                inst_type = 'A';
-            }
-            if (is_label(line)) {
-                inst_type = 'L';
-                char label[MAX_LABEL_LENGTH] = {0};
-                strcpy(line, extract_label(line, label));
-                if (!(isalpha(label[0])))   {
-                    exit_program(EXIT_INVALID_LABEL, line_num, line);
-                }
-                if (symtable_find(label) !=  NULL) {
-                    exit_program(EXIT_SYMBOL_ALREADY_EXISTS, line_num, line);
-                }
-                symtable_insert(label, instr_num);
-                continue;   // does continue actually exit the function?
-            }
-            if (is_Ctype(line)) {
-                char *tmp_line[MAX_LINE_LENGTH];
-                strcpy(tmp_line, line);
-                parse_C_instruction(tmp_line, &instr.instr.c);
-                if (instr.instr.c.dest == DEST_INVALID) {
-                    exit_program(EXIT_INVALID_C_DEST, line_num, line);
-                }
-                else if (instr.instr.c.comp == COMP_INVALID) {
-                    exit_program(EXIT_INVALID_C_COMP, line_num, line);
-                }
-                else if (instr.instr.c.dest == DEST_INVALID) {
-                    exit_program(EXIT_INVALID_C_DEST, line_num, line);
-                }
-                instr.itype = C_TYPE;
-                inst_type = 'C';
-            }
-            printf("%c  %s\n", inst_type, line); 
-            instructions[instr_num++] = instr;
-            return instr_num;
+    unsigned int line_num = 0;
+    unsigned int instr_num = 0;
+    instruction instr;
+    add_predefined_symbols();
+    symtable_display_table();
+    while (fgets(line, sizeof(line), file)) {
+        line_num ++;
+        if (instr_num > MAX_INSTRUCTIONS) {
+            exit_program(EXIT_TOO_MANY_INSTRUCTIONS, MAX_INSTRUCTIONS + 1);
         }
+        strip(line);
+        if (!*line) {
+            continue;
+        }
+        char inst_type;
+        if (is_Atype(line)) {
+            if (!parse_A_instruction(line, &instr.instr.a)) {
+                exit_program(EXIT_INVALID_A_INSTR, line_num, line);
+            }
+            instr.itype = A_TYPE;
+            inst_type = 'A';
+        }
+        if (is_label(line)) {
+            inst_type = 'L';
+            char label[MAX_LABEL_LENGTH] = {0};
+            strcpy(line, extract_label(line, label));
+            if (!(isalpha(label[0])))   {
+                exit_program(EXIT_INVALID_LABEL, line_num, line);
+            }
+            if (symtable_find(label) !=  NULL) {
+                exit_program(EXIT_SYMBOL_ALREADY_EXISTS, line_num, line);
+            }
+            symtable_insert(label, instr_num);
+            continue;   // does continue actually exit the function?
+        }
+        if (is_Ctype(line)) {
+            char tmp_line[MAX_LINE_LENGTH];
+            strcpy(tmp_line, line);
+            parse_C_instruction(tmp_line, &instr.instr.c);
+            if (instr.instr.c.dest == DEST_INVALID) {
+                exit_program(EXIT_INVALID_C_DEST, line_num, line);
+            }
+            else if (instr.instr.c.comp == COMP_INVALID) {
+                exit_program(EXIT_INVALID_C_COMP, line_num, line);
+            }
+            else if (instr.instr.c.dest == DEST_INVALID) {
+                exit_program(EXIT_INVALID_C_DEST, line_num, line);
+            }
+            instr.itype = C_TYPE;
+            inst_type = 'C';
+        }
+        printf("%c  %s\n", inst_type, line); 
+        instructions[instr_num++] = instr;
+    }
+    return instr_num;
 }
 
 char *strip(char *s) {
@@ -110,7 +110,7 @@ void add_predefined_symbols() {
 
 bool parse_A_instruction(const char *line, a_instruction *instr) {
     char* s = (char*) malloc(strlen(line));
-    s = line + 1;
+    strcpy(s, line + 1);
     char* s_end = NULL;
     long result = strtol(s, &s_end, 10);
     if (s_end == s) {
@@ -128,6 +128,7 @@ bool parse_A_instruction(const char *line, a_instruction *instr) {
         instr->operand.address = result;
         instr->is_addr = true;
     }
+    return true;
 }
 
 

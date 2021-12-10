@@ -1,7 +1,12 @@
 #ifndef __ERROR_H__
 #define __ERROR_H__
 
+#include "hack.h"
+#include "symtable.h"
+#include "parser.h"
 #include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 enum exitcode {
     EXIT_INCORRECT_ARGUMENTS = 1,   // means that the given file does not exist

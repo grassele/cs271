@@ -1,6 +1,9 @@
 #ifndef __HACK_H__
 #define __HACK_H__
 
+#include "parser.h"
+#include "error.h"
+#include "symtable.h"
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -168,7 +171,7 @@ static inline dest_id str_to_destid(const char *s) {
     else if (strcmp(s, "D") == 0) {
         id = DEST_D;
     }
-    else if (strcmp(s, "DM") == 0) {
+    else if (strcmp(s, "DM") == 0 || strcmp(s, "MD") == 0) {
         id = DEST_DM;
     }
     else if (strcmp(s, "A") == 0) {
@@ -180,7 +183,7 @@ static inline dest_id str_to_destid(const char *s) {
     else if (strcmp(s, "AD") == 0) {
         id = DEST_AD;
     }
-    else if (strcmp(s, "ADM") == 0) {
+    else if (strcmp(s, "ADM") == 0 || strcmp(s, "AMD") == 0) {
         id = DEST_ADM;
     }
     return id;
@@ -189,115 +192,115 @@ static inline dest_id str_to_destid(const char *s) {
 
 static inline comp_id str_to_compid(const char *s, int *a) {
     comp_id id = COMP_INVALID;
-    if (strcmp(s, "0")) {
+    if (strcmp(s, "0") == 0) {
         id = COMP_0;
         *a = 0;
     }
-    else if (strcmp(s, "1")) {
+    else if (strcmp(s, "1") == 0) {
         id = COMP_1;
         *a = 0;
     }
-    else if (strcmp(s, "-1")) {
+    else if (strcmp(s, "-1") == 0) {
         id = COMP_NEG_1;
         *a = 0;
     }
-    else if (strcmp(s, "D")) {
+    else if (strcmp(s, "D") == 0) {
         id = COMP_D;
         *a = 0;
     }
-    else if (strcmp(s, "A")) {
+    else if (strcmp(s, "A") == 0) {
         id = COMP_A;
         *a = 0;
     }
-    else if (strcmp(s, "M")) {
+    else if (strcmp(s, "M") == 0) {
         id = COMP_M;
         *a = 1;
     }
-    else if (strcmp(s, "!D")) {
+    else if (strcmp(s, "!D") == 0) {
         id = COMP_NOT_D;
         *a = 0;
     }
-    else if (strcmp(s, "!A")) {
+    else if (strcmp(s, "!A") == 0) {
         id = COMP_NOT_A;
         *a = 0;
     }
-    else if (strcmp(s, "!M")) {
+    else if (strcmp(s, "!M") == 0) {
         id = COMP_NOT_M;
         *a = 1;
     }
-    else if (strcmp(s, "-D")) {
+    else if (strcmp(s, "-D") == 0) {
         id = COMP_NEG_D;
         *a = 0;
     }
-    else if (strcmp(s, "-A")) {
+    else if (strcmp(s, "-A") == 0) {
         id = COMP_NEG_A;
         *a = 0;
     }
-    else if (strcmp(s, "-M")) {
+    else if (strcmp(s, "-M") == 0) {
         id = COMP_NEG_M;
         *a = 1;
     }
-    else if (strcmp(s, "D+1")) {
+    else if (strcmp(s, "D+1") == 0) {
         id = COMP_D_PLUS_1;
         *a = 0;
     }
-    else if (strcmp(s, "A+1")) {
+    else if (strcmp(s, "A+1") == 0) {
         id = COMP_A_PLUS_1;
         *a = 0;
     }
-    else if (strcmp(s, "M+1")) {
+    else if (strcmp(s, "M+1") == 0) {
         id = COMP_M_PLUS_1;
         *a = 1;
     }
-    else if (strcmp(s, "D-1")) {
+    else if (strcmp(s, "D-1") == 0) {
         id = COMP_D_MINUS_1;
         *a = 0;
     }
-    else if (strcmp(s, "A-1")) {
+    else if (strcmp(s, "A-1") == 0) {
         id = COMP_A_MINUS_1;
         *a = 0;
     }
-    else if (strcmp(s, "M-1")) {
+    else if (strcmp(s, "M-1") == 0) {
         id = COMP_M_MINUS_1;
         *a = 1;
     }
-    else if (strcmp(s, "D+A")) {
+    else if (strcmp(s, "D+A") == 0 || strcmp(s, "A+D") == 0) {
         id = COMP_D_PLUS_A;
         *a = 0;
     }
-    else if (strcmp(s, "D+M")) {
+    else if (strcmp(s, "D+M") == 0 || strcmp(s, "M+D") == 0) {
         id = COMP_D_PLUS_M;
         *a = 1;
     }
-    else if (strcmp(s, "D-A")) {
+    else if (strcmp(s, "D-A") == 0) {
         id = COMP_D_MINUS_A;
         *a = 0;
     }
-    else if (strcmp(s, "D-M")) {
+    else if (strcmp(s, "D-M") == 0) {
         id = COMP_D_MINUS_M;
         *a = 1;
     }
-    else if (strcmp(s, "A-D")) {
+    else if (strcmp(s, "A-D") == 0) {
         id = COMP_A_MINUS_D;
         *a = 0;
     }
-    else if (strcmp(s, "M-D")) {
+    else if (strcmp(s, "M-D") == 0) {
         id = COMP_M_MINUS_D;
         *a = 1;
     }
-    else if (strcmp(s, "D&A")) {
+    else if (strcmp(s, "D&A") == 0 || strcmp(s, "A&D") == 0) {
         id = COMP_D_AND_A;
         *a = 0;
     }
-    else if (strcmp(s, "D&M")) {
+    else if (strcmp(s, "D&M") == 0 || strcmp(s, "M&D") == 0) {
         id = COMP_D_AND_M;
         *a = 1;
     }
-    else if (strcmp(s, "D|A")) {
+    else if (strcmp(s, "D|A")  == 0 || strcmp(s, "A|D") == 0) {
         id = COMP_D_OR_A;
         *a = 0;
     }
-    else if (strcmp(s, "D|M")) {
+    else if (strcmp(s, "D|M") == 0 || strcmp(s, "M|D") == 0) {
         id = COMP_D_OR_M;
         *a = 1;
     }

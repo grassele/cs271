@@ -11,8 +11,9 @@ int hash(char *str) {
 
 void symtable_insert(char* key, hack_addr addr) {
     struct Symbol *item = (struct Symbol*) malloc(sizeof(struct Symbol));
-    item -> addr = addr;
-    item -> name = key;
+    item->addr = addr;
+    item->name = (char*) malloc(strlen(key) + 1);
+    strcpy(item->name, key);
     int hashIndex = hash(key);
     while(hashArray[hashIndex] != NULL && hashArray[hashIndex] -> name != NULL) {
         ++hashIndex;
@@ -34,7 +35,7 @@ struct Symbol *symtable_find(char * key) {
     return NULL;
 }
 
-void display_table() {
+void symtable_display_table() {
     for(int i = 0; i < SYMBOL_TABLE_SIZE; i++) {
         if(hashArray[i] != NULL){
             printf(" {%s, %d},", hashArray[i] -> name, hashArray[i] -> addr);
