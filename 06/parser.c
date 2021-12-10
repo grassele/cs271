@@ -148,3 +148,48 @@ void parse_C_instruction(char *line, c_instruction *instr) {
     instr->a = (a == 0 ? 0 : 1);
 }
 
+
+void assemble(const char * file_name, instruction* instructions, int num_instructions) {
+    char *hack_file_name;
+    strcpy(hack_file_name, file_name);
+    strcat(hack_file_name, ".hack");
+    opcode op;
+    int new_address = 16;
+    FILE * hack = fopen(hack_file_name, "w");
+    for (int i = 0; i < num_instructions; i++) { // should this be < or <=
+        instruction instr = instructions[i];
+        if (instr.itype == 0) {
+            if (instructions[i].instr.a.is_addr == false) {
+                // a-instruction
+                if (symtable_find(instr.instr.a.operand.label)) {
+					op = symtable_find(instr.instr.a.operand.label) -> addr;
+				}
+                // c-instruction
+                else {
+                    symtable_insert(instr.instr.a.operand.label, new_address ++);
+					op = symtable_find(instr.instr.a.operand.label)->addr;
+                }
+                free(instr.instr.a.operand.label);
+            }
+            else {
+                op = instr.instr.a.operand.address;
+            }
+        }
+        else if (instr.itype == 1) {
+			op = instruction_to_opcode(instr.instr.c);
+		}
+		fprintf(hack, "%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n", OPCODE_TO_BINARY(op));
+    }
+    fclose(hack);
+}
+
+opcode instruction_to_opcode(c_instruction instr) {
+	opcode op = 0;
+	op |= (7 << 13);
+	op |= (instr.a << 12);
+	op |= (instr.comp << 6);
+	op |= (instr.dest << 3);
+	op |= (instr.jump << 0);
+	return op;
+}
+

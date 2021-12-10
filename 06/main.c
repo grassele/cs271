@@ -21,10 +21,14 @@ int main(int argc, const char *argv[]) {
     
     instruction *instructions = malloc(MAX_INSTRUCTION_COUNT * sizeof(instruction));
 
+    // first pass of our instruction
     int num_instructions = parse(file, instructions);
 
     // close file pointer
     fclose(file);
+
+    // second pass of our instruction
+    assemble(argv[1], instructions, num_instructions);
 
     free(instructions);
 
